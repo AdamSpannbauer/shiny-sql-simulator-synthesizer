@@ -94,6 +94,8 @@ sqlEmulatorUI <- function(id,
                           height = "200px",
                           button_icon = "database",
                           button_class = "info") {
+  library(shinyAce)
+
   shiny::div(
     shiny::fluidRow(
       shiny::column(
@@ -161,6 +163,8 @@ sqlEmulatorUI <- function(id,
 #' @examples
 #' sqlEmulatorServer("sql_emulator")
 sqlEmulatorServer <- function(id) {
+  library(shinyAce)
+
   shiny::moduleServer(
     id,
     function(input, output, session) {

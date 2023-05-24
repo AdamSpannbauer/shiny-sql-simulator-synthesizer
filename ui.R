@@ -10,9 +10,14 @@ ui <- dashboardPage(
   dashboardSidebar(
     sidebarMenu(
       menuItem(
-        text = "Intro",
-        tabName = "intro",
-        icon = icon("database")
+        text = "Upload and test",
+        tabName = "upload",
+        icon = icon("cloud-arrow-up")
+      ),
+      menuItem(
+        text = "Download app",
+        tabName = "download",
+        icon = icon("download")
       )
     )
   ),
@@ -78,7 +83,7 @@ ui <- dashboardPage(
     ),
     tabItems(
       tabItem(
-        tabName = "intro",
+        tabName = "upload",
         fileInput(
           inputId = "csv_files",
           label = "Upload CSV files",
@@ -88,7 +93,14 @@ ui <- dashboardPage(
             "text/comma-separated-values,text/plain",
             ".csv"
           )
-        )
+        ),
+        uiOutput("table_name_list"),
+        uiOutput("test_emulator_ui")
+      ),
+      tabItem(
+        tabName = "download",
+        uiOutput("download_app_btn_ui"),
+        uiOutput("how_to_use")
       )
     )
   )

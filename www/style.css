@@ -1,3 +1,19 @@
+hr {
+  border-top: 1px solid #717171;
+}
+
+.btn-info {
+  background-color: #e37500 !important;
+  color: #fff !important;
+  border: 1px #ff8200 !important;
+}
+
+.btn-info:hover {
+  background-color: #ff8200 !important;
+  color: #fff !important;
+  border: 1px #e37500 !important;
+}
+
 .skin-black .main-header .logo {
   background-color: #ff8200 !important;
   color: #fff !important;
