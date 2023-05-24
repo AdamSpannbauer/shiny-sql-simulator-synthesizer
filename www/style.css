@@ -1,0 +1,16 @@
+.skin-black .main-header .logo {
+  background-color: #ff8200 !important;
+  color: #fff !important;
+  border-right: 1px solid #e37500 !important;
+}
+
+.skin-black .main-header .navbar {
+  background-color: #ff8200 !important;
+  color: #fff !important;
+}
+
+.skin-black .main-header .navbar .sidebar-toggle {
+  background-color: #ff8200 !important;
+  color: #fff !important;
+  border-right: 1px solid #e37500 !important;
+}
