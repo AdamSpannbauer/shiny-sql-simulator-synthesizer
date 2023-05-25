@@ -1,6 +1,7 @@
 library(shiny)
 library(shinydashboard)
 library(tools)
+library(markdown)
 
 server <- function(input, output, session) {
   uploaded_data <- reactive({
@@ -19,7 +20,7 @@ server <- function(input, output, session) {
     req(uploaded_data())
 
     list_items <- lapply(names(uploaded_data()), function(name_i) {
-      tags$li(name_i)
+      tags$li(tags$code(name_i))
     })
 
     do.call(tags$ul, list_items)
@@ -31,18 +32,7 @@ server <- function(input, output, session) {
     tags$div(
       h3("Available tables:"),
       table_list_html(),
-      HTML("<h6>names pulled from file names (i.e. <code>path/to/data.csv</code> will become a table named <code>data</code>)</h6>"),
-      hr()
-    )
-  })
-
-  output$table_name_list_again <- renderUI({
-    req(table_list_html())
-
-    tags$div(
-      h3("Available tables:"),
-      table_list_html(),
-      HTML("<h6>names pulled from file names (i.e. <code>path/to/data.csv</code> will become a table named <code>data</code>)</h6>"),
+      HTML("<h6>names pulled from file names (i.e. <code>C:/Users/cooldude42/customers.csv</code> will become a table named <code>customers</code>)</h6>"),
       hr()
     )
   })
@@ -63,43 +53,41 @@ server <- function(input, output, session) {
           style = "font-size: 1.3em"
         ),
         class = "btn-info"
-      ),
-      hr()
+      )
     )
   })
 
   output$download_app_btn <- downloadHandler(
     filename = function() {
-      "sql_simulator.Rdata"
+      "sql_simulator.zip"
     },
     content = function(file) {
       req(uploaded_data())
 
-      ui <- fluidPage(
-        tags$link(
-          rel = "stylesheet",
-          type = "text/css",
-          href = "https://raw.githubusercontent.com/trestletech/shinyAce/master/inst/www/shinyAce.css"
-        ),
-        tags$div(
-          h3("Available tables:"),
-          table_list_html(),
-          hr()
-        ),
-        sqlEmulatorUI(id = "sql_emulator")
+      assign(
+        x = "available_tables_ui",
+        value = table_list_html(),
+        envir = globalenv()
       )
-      server <- function(input, output, session) sqlEmulatorServer(id = "sql_emulator")
 
       save_items <- c(
         names(uploaded_data()),
-        "ui",
-        "server",
         "sqlEmulatorUI",
-        "sqlEmulatorServer"
+        "sqlEmulatorServer",
+        "trunc_char_vec",
+        "trunc_df_char_cols",
+        "available_tables_ui"
       )
 
-      save(list = save_items, file = file)
-    }
+      tmp <- tempdir()
+      setwd(tmp)
+
+      save(list = save_items, file = "sql-simulator-resources.Rdata")
+      writeLines(SQL_SIMULATOR_STARTER_CODE, con = "sql-simulator-app.R")
+
+      zip(zipfile = file, files = c("sql-simulator-resources.Rdata", "sql-simulator-app.R"))
+    },
+    contentType = "application/zip"
   )
 
   output$test_emulator_ui <- renderUI({

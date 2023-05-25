@@ -10,14 +10,14 @@ ui <- dashboardPage(
   dashboardSidebar(
     sidebarMenu(
       menuItem(
-        text = "Upload and test",
-        tabName = "upload",
-        icon = icon("cloud-arrow-up")
+        text = "Instructions",
+        tabName = "instructions",
+        icon = icon("map")
       ),
       menuItem(
-        text = "Download app",
-        tabName = "download",
-        icon = icon("download")
+        text = "Generate your app",
+        tabName = "generate",
+        icon = icon("bolt-lightning")
       )
     )
   ),
@@ -83,7 +83,11 @@ ui <- dashboardPage(
     ),
     tabItems(
       tabItem(
-        tabName = "upload",
+        tabName = "instructions",
+        uiOutput("how_to_use")
+      ),
+      tabItem(
+        tabName = "generate",
         fileInput(
           inputId = "csv_files",
           label = "Upload CSV files",
@@ -94,13 +98,9 @@ ui <- dashboardPage(
             ".csv"
           )
         ),
+        uiOutput("download_app_btn_ui"),
         uiOutput("table_name_list"),
         uiOutput("test_emulator_ui")
-      ),
-      tabItem(
-        tabName = "download",
-        uiOutput("download_app_btn_ui"),
-        uiOutput("how_to_use")
       )
     )
   )

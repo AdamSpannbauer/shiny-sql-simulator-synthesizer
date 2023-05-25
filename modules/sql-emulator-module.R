@@ -90,7 +90,7 @@ trunc_df_char_cols <- function(my_df, max_chars = 50, trailing_text = "...") {
 #' sqlEmulatorUI("sql_emulator", label = "Enter your SQL query")
 sqlEmulatorUI <- function(id,
                           label = "Write your query here",
-                          placeholder = "SELECT clue FROM evidence;",
+                          placeholder = "SELECT * FROM table;",
                           height = "200px",
                           button_icon = "database",
                           button_class = "info") {
