@@ -1,6 +1,7 @@
 library(shiny)
 library(shinydashboard)
 
+
 ui <- dashboardPage(
   skin = "black",
   title = "SQL Simulator Synthesizer",
@@ -99,7 +100,7 @@ ui <- dashboardPage(
           )
         ),
         uiOutput("download_app_btn_ui"),
-        uiOutput("table_name_list"),
+        uiOutput("table_tree"),
         uiOutput("test_emulator_ui")
       )
     )

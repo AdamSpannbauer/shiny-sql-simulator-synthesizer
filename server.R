@@ -1,7 +1,10 @@
-library(shiny)
-library(shinydashboard)
 library(tools)
 library(markdown)
+
+library(shiny)
+library(shinydashboard)
+library(shinyTree)
+
 
 server <- function(input, output, session) {
   uploaded_data <- reactive({
@@ -16,23 +19,22 @@ server <- function(input, output, session) {
     df_list
   })
 
-  table_list_html <- reactive({
-    req(uploaded_data())
-
-    list_items <- lapply(names(uploaded_data()), function(name_i) {
-      tags$li(tags$code(name_i))
-    })
-
-    do.call(tags$ul, list_items)
+  output$dataframe_tree <- renderTree({
+    lapply(uploaded_data(), \(x) build_df_tree_item(x))
   })
 
-  output$table_name_list <- renderUI({
-    req(table_list_html())
+  output$table_tree <- renderUI({
+    req(uploaded_data())
 
     tags$div(
       h3("Available tables:"),
-      table_list_html(),
-      HTML("<h6>names pulled from file names (i.e. <code>C:/Users/cooldude42/customers.csv</code> will become a table named <code>customers</code>)</h6>"),
+      shinyTree(
+        "dataframe_tree",
+        theme = "proton",
+        themeIcons = FALSE,
+        search = TRUE
+      ),
+      HTML("<h6>table names pulled from file names (i.e. <code>C:/Users/cooldude42/customers.csv</code> will become a table named <code>customers</code>)</h6>"),
       hr()
     )
   })
@@ -65,8 +67,8 @@ server <- function(input, output, session) {
       req(uploaded_data())
 
       assign(
-        x = "available_tables_ui",
-        value = table_list_html(),
+        x = "dataframe_tree_list",
+        value = lapply(uploaded_data(), \(x) build_df_tree_item(x)),
         envir = globalenv()
       )
 
@@ -76,7 +78,7 @@ server <- function(input, output, session) {
         "sqlEmulatorServer",
         "trunc_char_vec",
         "trunc_df_char_cols",
-        "available_tables_ui"
+        "dataframe_tree_list"
       )
 
       tmp <- tempdir()

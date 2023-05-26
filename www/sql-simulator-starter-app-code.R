@@ -18,6 +18,7 @@ install_and_load("shiny")
 install_and_load("DT")
 install_and_load("sqldf")
 install_and_load("shinyAce")
+install_and_load("shinyTree")
 
 # Load some fancy stuff for SQL editor
 shinyAce:::initResourcePaths()
@@ -34,7 +35,12 @@ ui <- fluidPage(
   ),
   tags$div(
     h3("Available tables:"),
-    available_tables_ui,
+    shinyTree(
+      "dataframe_tree",
+      theme = "proton",
+      themeIcons = FALSE,
+      search = TRUE
+    ),
     hr()
   ),
   sqlEmulatorUI(id = "sql_emulator")
@@ -42,6 +48,10 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   sqlEmulatorServer(id = "sql_emulator")
+
+  output$dataframe_tree <- renderTree({
+    dataframe_tree_list
+  })
 }
 
 shiny::shinyApp(ui, server)
