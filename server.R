@@ -14,6 +14,7 @@ server <- function(input, output, session) {
 
     clean_names <- basename(input$csv_files$name)
     clean_names <- tools::file_path_sans_ext(clean_names)
+    clean_names <- clean_table_names(clean_names)
     names(df_list) <- clean_names
 
     df_list
